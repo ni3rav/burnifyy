@@ -7,8 +7,6 @@ const app: Express = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-
-const PORT = process.env.PORT;
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 const REDIRECT_URI = process.env.REDIRECT_URI
@@ -44,6 +42,6 @@ app.get('/login', function (req, res) {
         }));
 });
 
-app.listen(PORT, async () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+app.listen(1812, async () => {
+    console.log(`Server is running at http://localhost:1812`);
 })
