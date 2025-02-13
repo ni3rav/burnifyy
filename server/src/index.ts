@@ -1,7 +1,12 @@
-import express from 'express';
-import querystring from 'querystring';
+import express, { Express, Request, Response } from 'express'
+import bodyParser from 'body-parser'
+import querystring from 'querystring'
 
-const app = express();
+const app: Express = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 
 const PORT = process.env.PORT;
 const CLIENT_ID = process.env.CLIENT_ID
@@ -38,3 +43,7 @@ app.get('/login', function (req, res) {
             state: state
         }));
 });
+
+app.listen(PORT, async () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+})
