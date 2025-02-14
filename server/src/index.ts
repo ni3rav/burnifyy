@@ -1,11 +1,20 @@
 import express, { Express } from 'express'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import querystring from 'querystring'
+import axios from 'axios'
 import { env } from './env'
 
 const app: Express = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cookieParser())
+
+//* tokens respone interface
+interface TokensResponse {
+  access_token: string
+  refresh_token: string
+}
 
 //* typesafe env variables
 const CLIENT_ID = env.CLIENT_ID
@@ -49,11 +58,11 @@ app.get('/login', function (req, res) {
 
 //* callback route
 
-app.get('/callback', function (req, res) {
+app.get('/callback', async function (req, res) {
   const code = req.query.code || null
   const state = req.query.state || null
 
-  if (state === null) {
+  if (!state || typeof code !== 'string') {
     res.redirect(
       '/#' +
         querystring.stringify({
@@ -61,7 +70,6 @@ app.get('/callback', function (req, res) {
         })
     ) //? state mismatch error
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {
@@ -74,6 +82,39 @@ app.get('/callback', function (req, res) {
         Authorization: 'Basic ' + Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
       },
       json: true
+    }
+
+    try {
+      const response = await axios.post(authOptions.url, new URLSearchParams(authOptions.form), {
+        headers: authOptions.headers
+      })
+
+      const { access_token, refresh_token } = response.data as TokensResponse
+
+      //! store access_token and refresh_token in http only cookies
+      res.cookie('access_token', access_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 3600 * 1000 // 1 hour
+      })
+
+      res.cookie('refresh_token', refresh_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 30 * 24 * 3600 * 1000 // 30 days
+      })
+
+      res.json({ message: 'tokens stored in cookies' })
+    } catch (error) {
+      if (error instanceof Error) {
+        // eslint-disable-next-line
+        console.error('Error exchanging code for token:', (error as any).response?.data || error.message)
+      } else {
+        console.error('Error exchanging code for token:', error)
+      }
+      res.status(500).json({ error: 'invalid_token' })
     }
   }
 })
