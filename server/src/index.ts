@@ -1,15 +1,17 @@
 import express, { Express, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import querystring from 'querystring'
+import { env } from './env'
 
 const app: Express = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = process.env.REDIRECT_URI
+const CLIENT_ID = env.CLIENT_ID
+const CLIENT_SECRET = env.CLIENT_SECRET
+const REDIRECT_URI = env.REDIRECT_URI
+const PORT = env.PORT
 
 function generateRandomString(length: number): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -42,6 +44,6 @@ app.get('/login', function (req, res) {
         }));
 });
 
-app.listen(1812, async () => {
-    console.log(`Server is running at http://localhost:1812`);
+app.listen(PORT, async () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
 })
