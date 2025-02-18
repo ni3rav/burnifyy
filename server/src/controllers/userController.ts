@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Request, Response } from 'express'
 import { SpotifyTopArtistsResponse, SpotifyTopTracksResponse, TrackData } from 'utils/types'
 
-const default_image_url: string ='https://i.pinimg.com/originals/4e/a0/e5/4ea0e5cf3eabce88e14ae82a94860767.jpg'
+const default_image_url: string = 'https://i.pinimg.com/originals/4e/a0/e5/4ea0e5cf3eabce88e14ae82a94860767.jpg'
 
 export const user = async (req: Request, res: Response): Promise<void> => {
   try {

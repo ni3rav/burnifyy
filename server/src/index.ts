@@ -6,7 +6,6 @@ import authRoutes from './routes/auth'
 import tokenRoutes from './routes/tokens'
 import userRoutes from './routes/user'
 
-
 const app: Express = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

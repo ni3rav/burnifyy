@@ -4,7 +4,6 @@ export interface TokensResponse {
   refresh_token: string
 }
 
-
 // Type for an artist object
 export type Artist = {
   name: string
