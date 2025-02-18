@@ -1,5 +1,8 @@
 import axios from 'axios'
 import { Request, Response } from 'express'
+import { SpotifyTopArtistsResponse, SpotifyTopTracksResponse, TrackData } from 'utils/types'
+
+const default_image_url: string ='https://i.pinimg.com/originals/4e/a0/e5/4ea0e5cf3eabce88e14ae82a94860767.jpg'
 
 export const user = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -13,5 +16,74 @@ export const user = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Failed to fetch user profile' })
+  }
+}
+
+export const topTracks = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const access_token = req.cookies.access_token
+
+    if (!access_token) {
+      res.status(400).json({ error: 'No access token found in cookies' })
+      return
+    }
+
+    const topTracksResponse = await axios.get<SpotifyTopTracksResponse>('https://api.spotify.com/v1/me/top/tracks', {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    })
+
+    //! Check if the response contains data and handle it safely
+    if (!topTracksResponse.data || !topTracksResponse.data.items) {
+      res.status(500).json({ error: 'Invalid data received from Spotify API' })
+      return
+    }
+
+    //! Map over the tracks and extract the required data with additional safety
+    const topTracksData: TrackData[] = topTracksResponse.data.items.map((track) => ({
+      trackName: track.name,
+      artistName: track.artists?.map((artist) => artist.name).join(', ') ?? 'Unknown Artist',
+      coverImageUrl: track.album?.images?.[0]?.url ?? default_image_url
+    }))
+
+    res.status(200).json(topTracksData)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Failed to fetch user top tracks' })
+  }
+}
+
+export const topArtists = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const access_token = req.cookies.access_token
+
+    if (!access_token) {
+      res.status(400).json({ error: 'No access token found in cookies' })
+      return
+    }
+
+    const topArtistsResponse = await axios.get<SpotifyTopArtistsResponse>('https://api.spotify.com/v1/me/top/artists', {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    })
+
+    //! map over the artists and extract the required data with additional safety
+
+    const topArtistsData = topArtistsResponse.data.items.map((artist) => ({
+      artistName: artist.name,
+      coverImageUrl: artist.images?.[0]?.url ?? default_image_url
+    }))
+
+    if (!topArtistsResponse.data || !topArtistsResponse.data.items) {
+      res.status(500).json({ error: 'Invalid data received from Spotify API' })
+      return
+    }
+
+    res.status(200).json(topArtistsData)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Failed to fetch user top tracks' })
   }
 }

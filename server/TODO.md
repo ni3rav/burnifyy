@@ -1,0 +1,8 @@
+- [x] implement auth login 
+- [x] implement user profile endpoint 
+- [x] implement top artists endpoint
+- [x] implement top tracks endpoint
+- [ ] create a react or next js frontend
+- [ ] fix cors
+- [ ] display the data fetched so far
+- [ ] search for an llm api that can be used for generating roast
