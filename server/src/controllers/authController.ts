@@ -75,18 +75,19 @@ export async function callback(req: Request, res: Response) {
       //! store access_token and refresh_token in http only cookies
       res.cookie('access_token', access_token, {
         httpOnly: true,
-        secure: true,
+        secure: env.isProduction ? true : false,
         sameSite: 'strict',
         maxAge: 3600 * 1000 // 1 hour
       })
 
       res.cookie('refresh_token', refresh_token, {
         httpOnly: true,
-        secure: true,
+        secure: env.isProduction ? true : false,
         sameSite: 'strict',
         maxAge: 30 * 24 * 3600 * 1000 // 30 days
       })
-      res.status(200).json({ success: true })
+      // res.status(200).json({ success: true })
+      res.redirect(`${env.FRONTEND_URL}/dashboard`)
     } catch (error) {
       console.error('Error exchanging code for token:', error)
       res.status(500).json({ error: 'invalid_token' })
