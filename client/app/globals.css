@@ -3,47 +3,40 @@
 @tailwind utilities;
 @layer base {
   :root {
-    --background: 141 100% 95%;
-    --foreground: 141 5% 0%;
-    --card: 141 50% 90%;
-    --card-foreground: 141 5% 10%;
-    --popover: 141 100% 95%;
-    --popover-foreground: 141 100% 0%;
-    --primary: 141 75.5% 48%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 141 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 103 30% 85%;
-    --muted-foreground: 141 5% 35%;
-    --accent: 103 30% 80%;
-    --accent-foreground: 141 5% 10%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 141 5% 90%;
-    --border: 141 30% 50%;
-    --input: 141 30% 18%;
-    --ring: 141 75.5% 48%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 141 50% 5%;
-    --foreground: 141 5% 90%;
-    --card: 141 50% 0%;
-    --card-foreground: 141 5% 90%;
-    --popover: 141 50% 5%;
-    --popover-foreground: 141 5% 90%;
-    --primary: 141 75.5% 48%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 141 30% 10%;
+    --background: 0 0% 0%;
+    --foreground: 141.43 70% 92.16%;
+
+    --primary: 141.41 75.51% 48.04%;
+    --primary-foreground: 143.33 75% 4.71%;
+
+    --card: 137.14 24.14% 5.69%;
+    --card-foreground: 141.43 70% 92.16%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 141.43 70% 92.16%;
+
+    --secondary: 141.56 74.42% 16.86%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 103 30% 15%;
-    --muted-foreground: 141 5% 60%;
-    --accent: 103 30% 15%;
-    --accent-foreground: 141 5% 90%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 141 5% 90%;
-    --border: 141 30% 18%;
-    --input: 141 30% 18%;
-    --ring: 141 75.5% 48%;
+
+    --muted: 0 0% 9.8%;
+    --muted-foreground: 0 0% 50.2%;
+
+    --accent: 141.56 74.42% 16.86%;
+    --accent-foreground: 141.43 70% 92.16%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 141.08 75.51% 9.61%;
+    --input: 142.11 18.81% 19.8%;
+    --ring: 141.41 75.51% 48.04%;
+
+    --chart-1: 141.41 75.51% 48.04%;
+    --chart-2: 141.4 75.12% 40.98%;
+    --chart-3: 141 75% 31.37%;
+    --chart-4: 141.39 74.81% 26.47%;
+    --chart-5: 141.43 76.36% 21.57%;
+
     --radius: 0.5rem;
   }
 }

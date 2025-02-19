@@ -1,7 +1,8 @@
+import LandingPage from "@/components/HeroSection";
 import React from "react";
 
 function page() {
-  return <div>page</div>;
+  return <LandingPage />;
 }
 
 export default page;
