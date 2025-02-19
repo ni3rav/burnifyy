@@ -86,7 +86,7 @@ export async function callback(req: Request, res: Response) {
         sameSite: 'strict',
         maxAge: 30 * 24 * 3600 * 1000 // 30 days
       })
-      res.redirect(`${env.FRONTEND_URL}/dashboard`)
+      res.send(`<a href="${env.FRONTEND_URL}/dashboard">Click here to proceed</a>`)
     } catch (error) {
       console.error('Error exchanging code for token:', error)
       res.status(500).json({ error: 'invalid_token' })
