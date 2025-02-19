@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { env } from "@/lib/env";
 
 export function useAuth(redirectTo: string = "/") {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/status`, {
+    fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/auth/status`, {
       credentials: "include", // Send cookies with the request
     })
       .then((res) => {
