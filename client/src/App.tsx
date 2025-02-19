@@ -1,13 +1,24 @@
-import Footer from "./components/Footer";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Hero from "./components/Hero";
-import Navbar from "./components/Navbar";
+import Dashboard from "./components/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the Protected Route component
 
-export default function App() {
+function App() {
   return (
-    <>
-      <Navbar />
-      <Hero />
-      <Footer />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Hero />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
+
+export default App;
