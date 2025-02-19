@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import LoginButton from "./LoginButton";
 
 function LandingPage() {
   return (
@@ -11,7 +11,7 @@ function LandingPage() {
           A place where innovation meets execution. Join us and take your skills
           to the next level.
         </p>
-        <Button className="w-1/4">Get Started</Button>
+        <LoginButton />
       </div>
     </section>
   );
