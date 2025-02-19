@@ -86,11 +86,21 @@ export async function callback(req: Request, res: Response) {
         sameSite: 'strict',
         maxAge: 30 * 24 * 3600 * 1000 // 30 days
       })
-
-      res.json({ message: 'tokens stored in cookies' })
+      res.redirect(`${env.FRONTEND_URL}/dashboard`)
     } catch (error) {
       console.error('Error exchanging code for token:', error)
       res.status(500).json({ error: 'invalid_token' })
     }
+  }
+}
+
+//* auth status controller
+
+export function status(req: Request, res: Response) {
+  const access_token = req.cookies.access_token
+  if (!access_token) {
+    res.status(401).json({ error: 'unauthorized' })
+  } else {
+    res.status(200).json({ access_token })
   }
 }

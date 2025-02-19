@@ -7,22 +7,20 @@ import authRoutes from './routes/auth'
 import tokenRoutes from './routes/tokens'
 import userRoutes from './routes/user'
 
-
 const app: Express = express()
 
 //* cors
 // Allow requests from your frontend URL
-const allowedOrigins = [env.FRONTEND_URL]; // Change this in production
+const allowedOrigins = [env.FRONTEND_URL] // Change this in production
 
 app.use(
   cors({
     origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // Allows cookies and authentication headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // Allows cookies and authentication headers
   })
-);
-
+)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
