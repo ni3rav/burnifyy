@@ -24,7 +24,7 @@ export const topTracks = async (req: Request, res: Response): Promise<void> => {
     const access_token = req.cookies.access_token
 
     if (!access_token) {
-      res.status(400).json({ error: 'No access token found in cookies' })
+      res.status(401).json({ error: 'No access token found in cookies' })
       return
     }
 
