@@ -1,6 +1,6 @@
 "use client";
 
-import { useLogout } from "@/hooks/useLogOut";
+import { useLogout } from "@/hooks/useLogout";
 import { LogOut } from "lucide-react";
 
 export function LogOutButton() {
