@@ -8,3 +8,16 @@ export type SpotifyUserProfile = {
   }[];
   product: string;
 };
+
+export type ArtistData = {
+  name: string;
+  imageUrl: string;
+  genre: string[];
+  followers: number;
+};
+
+export type TrackData = {
+  trackName: string;
+  artistName: string;
+  coverImageUrl: string;
+};
