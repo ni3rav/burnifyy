@@ -1,10 +1,10 @@
-import { ArrowRight, User } from "lucide-react"
+import { User } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { LogOutButton } from "./LogOutButton";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Card, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-
-export function HeaderCard() {
+export function HeaderPresenter() {
   return (
     <Card>
       <CardHeader>
@@ -17,10 +17,9 @@ export function HeaderCard() {
             </Avatar>
             <Skeleton className="h-4 w-[150px]" />
           </div>
-          <ArrowRight className="h-5 w-5 text-muted-foreground" />
+          <LogOutButton />
         </div>
       </CardHeader>
     </Card>
-  )
+  );
 }
-
