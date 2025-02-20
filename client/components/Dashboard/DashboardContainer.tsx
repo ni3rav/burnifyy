@@ -1,9 +1,8 @@
 import { HeaderContainer } from "@/components/Dashboard/Header/HeaderContainer";
 import { RoastSection } from "@/components/Dashboard/roast-section";
-import { TopArtists } from "@/components/Dashboard/top-artists";
-import { TopTracks } from "@/components/Dashboard/top-tracks";
 import { Footer } from "@/components/Footer";
 import { TopTracksContainer } from "@/components/Dashboard/TopTracks/TopTracksContainer";
+import { TopArtistsContainer } from "@/components/Dashboard/TopArtists/TopArtistsContainer";
 
 export default function DashboardContainer() {
   return (
@@ -12,7 +11,7 @@ export default function DashboardContainer() {
       <div className="grid gap-4 md:grid-cols-[1fr,400px]">
         <div className="space-y-4">
           <TopTracksContainer />
-          <TopArtists />
+          <TopArtistsContainer />
         </div>
         <RoastSection />
       </div>

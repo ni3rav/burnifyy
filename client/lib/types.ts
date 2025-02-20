@@ -10,10 +10,8 @@ export type SpotifyUserProfile = {
 };
 
 export type ArtistData = {
-  name: string;
-  imageUrl: string;
-  genre: string[];
-  followers: number;
+  artistName: string;
+  coverImageUrl: string;
 };
 
 export type TrackData = {
