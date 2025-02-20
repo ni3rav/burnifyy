@@ -2,7 +2,9 @@
 - [x] implement user profile endpoint 
 - [x] implement top artists endpoint
 - [x] implement top tracks endpoint
-- [ ] create a react or next js frontend
-- [ ] fix cors
-- [ ] display the data fetched so far
-- [ ] search for an llm api that can be used for generating roast
+- [x] create a react or next js frontend
+- [x] fix cors
+- [x] display the data fetched so far
+- [x] search for an llm api that can be used for generating roast
+- [] implement gemini api to generate roast and display it to roast presenter
+- [] (later)optimise gemin api call to use top artists and tracks so that we dont have to make multiple api calls
