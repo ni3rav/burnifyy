@@ -30,7 +30,8 @@ export async function refresh(req: Request, res: Response) {
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: env.isProduction ? true : false,
-      sameSite: 'strict',
+      // sameSite: 'strict',
+      sameSite: 'none',
       maxAge: 3600 * 1000 // 1 hour
     })
 
@@ -38,7 +39,8 @@ export async function refresh(req: Request, res: Response) {
       res.cookie('refresh_token', new_refresh_token, {
         httpOnly: true,
         secure: env.isProduction ? true : false,
-        sameSite: 'strict',
+        // sameSite: 'strict',
+        sameSite: 'none',
         maxAge: 30 * 24 * 3600 * 1000 // 30 days
       })
     }
