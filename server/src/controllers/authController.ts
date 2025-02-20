@@ -112,5 +112,4 @@ export function logout(req: Request, res: Response) {
   res.clearCookie('access_token')
   res.clearCookie('refresh_token')
   res.status(200).json({ success: true })
-  res.redirect(`${env.FRONTEND_URL}`)
 }
