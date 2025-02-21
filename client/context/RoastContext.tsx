@@ -17,12 +17,12 @@ export function RoastProvider({ children }: { children: React.ReactNode }) {
   const STORAGE_KEY = "burnify_roasts";
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure it runs only on the client
+    if (typeof window === "undefined") return; // Ensure it runs only on client
 
     try {
       const storedData = localStorage.getItem(STORAGE_KEY);
       if (storedData) {
-        setRoasts(JSON.parse(storedData));
+        setRoasts(JSON.parse(storedData)); // Set roasts only once, avoiding duplication
       }
     } catch (error) {
       console.error("Error loading roasts from LocalStorage:", error);
@@ -47,7 +47,7 @@ export function RoastProvider({ children }: { children: React.ReactNode }) {
       roastText = roastText.replace(/^roast:/i, "").trim();
       roastText = roastText.replace(/n$/, "").trim();
 
-      const updatedRoasts = [...roasts, roastText];
+      const updatedRoasts = Array.from(new Set([...roasts, roastText])); // FIX: Convert Set to Array
 
       // Store in LocalStorage
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRoasts));
