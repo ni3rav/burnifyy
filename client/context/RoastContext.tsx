@@ -3,35 +3,66 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { env } from "@/lib/env";
 
+interface RoastData {
+  text: string;
+  timestamp: number;
+}
+
 interface RoastContextProps {
-  roasts: string[];
+  roast: string | null;
   isLoading: boolean;
   fetchRoast: (topTracks: string[], topArtists: string[]) => Promise<void>;
 }
 
 const RoastContext = createContext<RoastContextProps | undefined>(undefined);
 
+const STORAGE_KEY = "burnify_roast";
+const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
+
 export function RoastProvider({ children }: { children: React.ReactNode }) {
-  const [roasts, setRoasts] = useState<string[]>([]);
+  const [roast, setRoast] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const STORAGE_KEY = "burnify_roasts";
+
+  const isRoastExpired = (timestamp: number): boolean => {
+    return Date.now() - timestamp > WEEK_IN_MS;
+  };
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure it runs only on client
+    if (typeof window === "undefined") return;
 
     try {
       const storedData = localStorage.getItem(STORAGE_KEY);
       if (storedData) {
-        setRoasts(JSON.parse(storedData)); // Set roasts only once, avoiding duplication
+        const roastData: RoastData = JSON.parse(storedData);
+        if (!isRoastExpired(roastData.timestamp)) {
+          setRoast(roastData.text);
+        } else {
+          localStorage.removeItem(STORAGE_KEY);
+        }
       }
     } catch (error) {
-      console.error("Error loading roasts from LocalStorage:", error);
+      console.error("Error loading roast from LocalStorage:", error);
     }
   }, []);
 
   const fetchRoast = async (topTracks: string[], topArtists: string[]) => {
     if (!topTracks.length || !topArtists.length) return;
 
+    // Check if we already have a valid roast
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEY);
+      if (storedData) {
+        const roastData: RoastData = JSON.parse(storedData);
+        if (!isRoastExpired(roastData.timestamp)) {
+          setRoast(roastData.text);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Error checking stored roast:", error);
+    }
+
+    // If we don't have a valid roast, fetch a new one
     setIsLoading(true);
     try {
       const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/roast`, {
@@ -43,15 +74,19 @@ export function RoastProvider({ children }: { children: React.ReactNode }) {
       if (!response.ok) throw new Error("Failed to fetch roast");
 
       let roastText = await response.text();
-      roastText = roastText.replace(/[{}"\\]/g, "").trim();
-      roastText = roastText.replace(/^roast:/i, "").trim();
-      roastText = roastText.replace(/n$/, "").trim();
+      roastText = roastText
+        .replace(/[{}"\\]/g, "")
+        .replace(/^roast:/i, "")
+        .replace(/n$/, "")
+        .trim();
 
-      const updatedRoasts = Array.from(new Set([...roasts, roastText])); // FIX: Convert Set to Array
+      const roastData: RoastData = {
+        text: roastText,
+        timestamp: Date.now(),
+      };
 
-      // Store in LocalStorage
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRoasts));
-      setRoasts(updatedRoasts);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(roastData));
+      setRoast(roastText);
     } catch (error) {
       console.error("Error fetching roast:", error);
     } finally {
@@ -60,7 +95,7 @@ export function RoastProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <RoastContext.Provider value={{ roasts, isLoading, fetchRoast }}>
+    <RoastContext.Provider value={{ roast, isLoading, fetchRoast }}>
       {children}
     </RoastContext.Provider>
   );
