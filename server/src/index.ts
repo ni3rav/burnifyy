@@ -6,6 +6,7 @@ import { env } from './utils/env'
 import authRoutes from './routes/auth'
 import tokenRoutes from './routes/tokens'
 import userRoutes from './routes/user'
+import roastRoutes from './routes/roast'
 
 const app: Express = express()
 
@@ -36,6 +37,9 @@ app.use('/token', tokenRoutes)
 
 //* user routes
 app.use('/user', userRoutes)
+
+//* roast route
+app.use('/roast', roastRoutes)
 
 //* server initialization
 app.listen(env.PORT, () => {

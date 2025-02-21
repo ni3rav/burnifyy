@@ -9,5 +9,6 @@ export const env = cleanEnv(process.env, {
   REDIRECT_URI: str(),
   BASE_URL: str(),
   PORT: port(),
-  FRONTEND_URL: str()
+  FRONTEND_URL: str(),
+  GEMINI_API_KEY: str(),
 })
