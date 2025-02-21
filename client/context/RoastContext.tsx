@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { env } from "@/lib/env";
 
 interface RoastContextProps {
@@ -14,6 +14,20 @@ const RoastContext = createContext<RoastContextProps | undefined>(undefined);
 export function RoastProvider({ children }: { children: React.ReactNode }) {
   const [roasts, setRoasts] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const STORAGE_KEY = "burnify_roasts";
+
+  useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure it runs only on the client
+
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEY);
+      if (storedData) {
+        setRoasts(JSON.parse(storedData));
+      }
+    } catch (error) {
+      console.error("Error loading roasts from LocalStorage:", error);
+    }
+  }, []);
 
   const fetchRoast = async (topTracks: string[], topArtists: string[]) => {
     if (!topTracks.length || !topArtists.length) return;
@@ -22,9 +36,7 @@ export function RoastProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/roast`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topTracks, topArtists }),
       });
 
@@ -35,7 +47,11 @@ export function RoastProvider({ children }: { children: React.ReactNode }) {
       roastText = roastText.replace(/^roast:/i, "").trim();
       roastText = roastText.replace(/n$/, "").trim();
 
-      setRoasts((prev) => [...prev, roastText]);
+      const updatedRoasts = [...roasts, roastText];
+
+      // Store in LocalStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRoasts));
+      setRoasts(updatedRoasts);
     } catch (error) {
       console.error("Error fetching roast:", error);
     } finally {
