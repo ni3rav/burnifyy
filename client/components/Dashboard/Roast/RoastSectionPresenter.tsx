@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -13,9 +14,11 @@ export function RoastSectionPresenter({
   roasts,
   onRoast,
 }: RoastSectionPresenterProps) {
+  const [isVisible, setIsVisible] = useState(true);
+
   return (
     <Card className="h-full bg-card text-card-foreground border border-border shadow-lg">
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between items-center">
         <h2 className="text-xl font-semibold">Get Roasted🔥</h2>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -43,7 +46,8 @@ export function RoastSectionPresenter({
                 <Skeleton className="h-4 w-[80%]" />
               </div>
             ))
-          : roasts.map((roast, i) => (
+          : isVisible &&
+            roasts.map((roast, i) => (
               <p key={i} className="text-foreground/80">
                 {roast.split("\n").map((line, index) => (
                   <span key={index}>
@@ -53,6 +57,24 @@ export function RoastSectionPresenter({
                 ))}
               </p>
             ))}
+
+        {/* Show/Hide & Share Buttons (Side by Side) */}
+        {roasts.length > 0 && !isLoading && (
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsVisible(!isVisible)}
+              className="text-foreground hover:bg-muted w-full"
+            >
+              {isVisible ? "Hide Roast" : "Show Roast"}
+            </Button>
+            {/* {isVisible && (
+              <Button variant="secondary" className="w-full">
+                Share
+              </Button>
+            )} */}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
