@@ -5,7 +5,7 @@ import { RoastSectionPresenter } from "./RoastSectionPresenter";
 
 export function RoastSectionContainer() {
   const { topTracks, topArtists } = useUserData();
-  const { isLoading, roasts, fetchRoast } = useRoast();
+  const { isLoading, roast, fetchRoast } = useRoast(); // Changed from roasts to roast
 
   const handleRoast = () => {
     fetchRoast(
@@ -17,7 +17,7 @@ export function RoastSectionContainer() {
   return (
     <RoastSectionPresenter
       isLoading={isLoading}
-      roasts={roasts}
+      roast={roast} // Changed from roasts to roast
       onRoast={handleRoast}
     />
   );
