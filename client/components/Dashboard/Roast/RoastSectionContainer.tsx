@@ -1,66 +1,55 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { RoastSectionPresenter } from "./RoastSectionPresenter";
 import { env } from "@/lib/env";
 
 export function RoastSectionContainer() {
-  const [roasts, setRoasts] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [roasts, setRoasts] = useState<string[]>([]);
 
-  // Load from LocalStorage on mount
-  useEffect(() => {
-    const savedRoasts = localStorage.getItem("roasts");
-    if (savedRoasts) setRoasts(JSON.parse(savedRoasts));
-  }, []);
+  const handleRoast = async () => {
+    setIsLoading(true);
 
-  async function fetchRoast() {
     try {
-      setIsLoading(true);
-
-      // Fetch user's top artists
-      const artistsResponse = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_URL}/user/top-artists`,
-        {
-          credentials: "include",
-        }
-      );
-
-      if (!artistsResponse.ok) throw new Error("Failed to fetch top artists");
-
-      const { artists } = await artistsResponse.json();
-      if (!artists.length) throw new Error("No artists found");
-
-      // Generate roast using Gemini API
-      const prompt = `Roast this user's music taste based on these top artists: ${artists.join(
-        ", "
-      )}`;
-      const geminiResponse = await fetch("/api/generate-roast", {
+      const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/roast`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topTracks: [
+            "Tujhe Bhula Diya",
+            "Agar Tum Saath Ho",
+            "Channa Mereya",
+            "Bhula Dena",
+          ],
+          topArtists: ["Arijit Singh", "Mohit Chauhan", "Jubin Nautiyal", "KK"],
+        }),
       });
 
-      if (!geminiResponse.ok) throw new Error("Gemini API failed");
+      if (!response.ok) {
+        throw new Error("Failed to fetch roast");
+      }
 
-      const { roast } = await geminiResponse.json();
-      const newRoasts = [...roasts, roast];
+      let roastText = await response.text();
 
-      // Save to state & LocalStorage
-      setRoasts(newRoasts);
-      localStorage.setItem("roasts", JSON.stringify(newRoasts));
+      // remove unnecessary characters and "roast:" prefix if it exists
+      roastText = roastText.replace(/[{}"\\]/g, "").trim(); // Removes special characters
+      roastText = roastText.replace(/^roast:/i, "").trim(); // Removes "roast:" at the start
+      roastText = roastText.replace(/n$/, "").trim();
+
+      setRoasts((prev) => [...prev, roastText]);
     } catch (error) {
       console.error("Error fetching roast:", error);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <RoastSectionPresenter
       isLoading={isLoading}
       roasts={roasts}
-      onRoast={fetchRoast}
+      onRoast={handleRoast}
     />
   );
 }

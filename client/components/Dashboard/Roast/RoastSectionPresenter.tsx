@@ -45,7 +45,12 @@ export function RoastSectionPresenter({
             ))
           : roasts.map((roast, i) => (
               <p key={i} className="text-foreground/80">
-                {roast}
+                {roast.split("\n").map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
               </p>
             ))}
       </CardContent>
