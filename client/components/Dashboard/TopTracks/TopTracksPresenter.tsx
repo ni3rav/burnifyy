@@ -50,7 +50,14 @@ export function TopTracksPresenter({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-base font-medium">{track.trackName}</p>
+                    <a
+                      href={track.spotifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-base font-medium text-primary hover:underline"
+                    >
+                      {track.trackName}
+                    </a>
                     <p className="text-sm text-muted-foreground">
                       {track.artistName}
                     </p>

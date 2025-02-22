@@ -39,14 +39,48 @@ export function TopArtistsPresenter({
             <div className="space-y-4">
               {topArtistsData.map((artist, index) => (
                 <div key={index} className="flex items-center gap-4">
+                  {/* Artist Image */}
                   <Avatar className="h-12 w-12">
-                    <AvatarImage src={artist.coverImageUrl} alt={artist.artistName} />
+                    <AvatarImage src={artist.imageUrl} alt={artist.name} />
                     <AvatarFallback className="flex items-center justify-center bg-muted">
                       <UserRound className="w-6 h-6 text-muted-foreground" />
                     </AvatarFallback>
                   </Avatar>
+
+                  {/* Artist Details */}
                   <div>
-                    <p className="text-base font-medium">{artist.artistName}</p>
+                    {/* Name + Followers (Separate, Same Line) */}
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={artist.spotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-base font-medium text-primary hover:underline"
+                      >
+                        {artist.name}
+                      </a>
+                      <span className="text-sm text-muted-foreground">
+                        | {artist.followers.toLocaleString()} Followers
+                      </span>
+                    </div>
+
+                    {/* Genres - Limited to 3 with Proper Casing */}
+                    <p className="text-sm text-muted-foreground">
+                      {artist.genre.length > 0
+                        ? artist.genre
+                            .slice(0, 3) // Limit to 3 genres
+                            .map((g) =>
+                              g
+                                .split(" ")
+                                .map(
+                                  (word) =>
+                                    word.charAt(0).toUpperCase() + word.slice(1)
+                                ) // Capitalize each word
+                                .join(" ")
+                            )
+                            .join(", ") // Join with commas
+                        : "Unknown Genre"}
+                    </p>
                   </div>
                 </div>
               ))}

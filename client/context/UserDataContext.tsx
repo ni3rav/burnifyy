@@ -45,7 +45,7 @@ export function UserDataProvider({ children }: { children: React.ReactNode }) {
           { credentials: "include" }
         );
         if (!response.ok) throw new Error("Failed to fetch artists data");
-        const data = await response.json();
+        const data: ArtistData[] = await response.json();
         setTopArtists(data);
       } catch (err) {
         setError("Failed to load artists data");
@@ -60,7 +60,7 @@ export function UserDataProvider({ children }: { children: React.ReactNode }) {
           { credentials: "include" }
         );
         if (!response.ok) throw new Error("Failed to fetch tracks data");
-        const data = await response.json();
+        const data: TrackData[] = await response.json();
         setTopTracks(data);
       } catch (err) {
         setError("Failed to load tracks data");

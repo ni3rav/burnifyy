@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Request, Response } from 'express'
-import { SpotifyTopArtistsResponse, SpotifyTopTracksResponse, TrackData } from 'utils/types'
+import { SpotifyTopArtistsResponse, SpotifyTopTracksResponse, TrackData, ArtistData } from 'utils/types'
 
 const default_image_url: string = 'https://i.pinimg.com/originals/4e/a0/e5/4ea0e5cf3eabce88e14ae82a94860767.jpg'
 
@@ -44,7 +44,8 @@ export const topTracks = async (req: Request, res: Response): Promise<void> => {
     const topTracksData: TrackData[] = topTracksResponse.data.items.map((track) => ({
       trackName: track.name,
       artistName: track.artists?.map((artist) => artist.name).join(', ') ?? 'Unknown Artist',
-      coverImageUrl: track.album?.images?.[0]?.url ?? default_image_url
+      coverImageUrl: track.album?.images?.[0]?.url ?? default_image_url,
+      spotifyUrl: track.external_urls.spotify // Include the Spotify URL
     }))
 
     res.status(200).json(topTracksData)
@@ -69,21 +70,24 @@ export const topArtists = async (req: Request, res: Response): Promise<void> => 
       }
     })
 
-    //! map over the artists and extract the required data with additional safety
-
-    const topArtistsData = topArtistsResponse.data.items.map((artist) => ({
-      artistName: artist.name,
-      coverImageUrl: artist.images?.[0]?.url ?? default_image_url
-    }))
-
+    //! Check if the response contains data and handle it safely
     if (!topArtistsResponse.data || !topArtistsResponse.data.items) {
       res.status(500).json({ error: 'Invalid data received from Spotify API' })
       return
     }
 
+    //! Map over the artists and extract the required data with additional safety
+    const topArtistsData: ArtistData[] = topArtistsResponse.data.items.map((artist) => ({
+      name: artist.name,
+      imageUrl: artist.images?.[0]?.url ?? default_image_url,
+      genre: artist.genres ?? [],
+      followers: artist.followers?.total ?? 0,
+      spotifyUrl: artist.external_urls.spotify // Include the Spotify URL
+    }))
+
     res.status(200).json(topArtistsData)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Failed to fetch user top tracks' })
+    res.status(500).json({ error: 'Failed to fetch user top artists' })
   }
 }

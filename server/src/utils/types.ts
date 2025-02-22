@@ -7,6 +7,7 @@ export interface TokensResponse {
 // Type for an artist object
 export type Artist = {
   name: string
+  external_urls: { spotify: string }
 }
 
 // Type for album images
@@ -17,6 +18,7 @@ export type AlbumImage = {
 // Type for album object
 export type Album = {
   images: AlbumImage[]
+  external_urls: { spotify: string }
 }
 
 // Type for track object
@@ -24,11 +26,11 @@ export type Track = {
   name: string
   artists: Artist[]
   album: Album
+  external_urls: { spotify: string }
 }
 
 // Interface for the full API response (Spotify Top Tracks)
 export interface SpotifyTopTracksResponse {
-  object: number
   items: Track[]
   total: number
   limit: number
@@ -38,11 +40,12 @@ export interface SpotifyTopTracksResponse {
   previous: string | null
 }
 
-// Interface for the simplified data structure
+// Interface for the simplified track data
 export interface TrackData {
   trackName: string
   artistName: string
   coverImageUrl: string
+  spotifyUrl: string
 }
 
 // Extended type for a detailed artist object
@@ -56,7 +59,6 @@ export type DetailedArtist = Artist & {
 
 // Interface for the full API response (Spotify Top Artists)
 export interface SpotifyTopArtistsResponse {
-  object: number
   items: DetailedArtist[]
   total: number
   limit: number
@@ -72,4 +74,5 @@ export interface ArtistData {
   imageUrl: string
   genre: string[]
   followers: number
+  spotifyUrl: string
 }
