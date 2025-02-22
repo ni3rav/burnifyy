@@ -59,8 +59,8 @@ export function TopArtistsPresenter({
                       >
                         {artist.name}
                       </a>
-                      <span className="text-sm text-muted-foreground">
-                        | {artist.followers.toLocaleString()} Followers
+                      <span className="text-xs text-muted-foreground">
+                        {artist.followers.toLocaleString()} Followers
                       </span>
                     </div>
 
