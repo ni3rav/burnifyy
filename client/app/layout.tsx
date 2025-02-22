@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import {IBM_Plex_Sans} from 'next/font/google'
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "burnifyy",
@@ -17,9 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${googleFonts.className} antialiased overflow-x-hidden`}
+        className={`${googleFonts.className} antialiased overflow-x-hidden bg-background`}
       >
         {children}
+        <Footer/>
       </body>
     </html>
   );

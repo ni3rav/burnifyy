@@ -3,9 +3,9 @@
 @tailwind utilities;
 @layer base {
   body {
-    --sb-track-color: #232e33;
-    --sb-thumb-color: #085a25;
-    --sb-size: 5px;
+    --sb-track-color: #085a2500;
+    --sb-thumb-color: #085a2500;
+    --sb-size: 0px;
   }
 
   body::-webkit-scrollbar {

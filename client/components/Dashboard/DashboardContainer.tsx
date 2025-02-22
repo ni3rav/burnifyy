@@ -1,6 +1,5 @@
 import { HeaderContainer } from "@/components/Dashboard/Header/HeaderContainer";
 // import { RoastSection } from "@/components/Dashboard/roast-section";
-import { Footer } from "@/components/Footer";
 import { TopTracksContainer } from "@/components/Dashboard/TopTracks/TopTracksContainer";
 import { TopArtistsContainer } from "@/components/Dashboard/TopArtists/TopArtistsContainer";
 import { RoastSectionContainer } from "@/components/Dashboard/Roast/RoastSectionContainer";
@@ -18,7 +17,6 @@ export default function DashboardContainer() {
          */}
          <RoastSectionContainer/>
       </div>
-      <Footer />
     </div>
   );
 }
