@@ -9,8 +9,8 @@ export function RoastSectionContainer() {
 
   const handleRoast = () => {
     fetchRoast(
-      topTracks?.map((track) => track.artistName) ?? [],
-      topArtists?.map((artist) => artist.artistName) ?? []
+      topTracks?.map((track) => track.trackName) ?? [],
+      topArtists?.map((artist) => artist.name) ?? []
     );
   };
 
