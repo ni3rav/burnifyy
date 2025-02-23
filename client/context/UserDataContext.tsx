@@ -18,12 +18,26 @@ const UserDataContext = createContext<UserDataContextProps | undefined>(
 
 export function UserDataProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<SpotifyUserProfile | null>(null);
-  const [topArtists, setTopArtists] = useState<ArtistData[] | null>([]);
-  const [topTracks, setTopTracks] = useState<TrackData[] | null>([]);
+  const [topArtists, setTopArtists] = useState<ArtistData[] | null>(null);
+  const [topTracks, setTopTracks] = useState<TrackData[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const sessionUserData = sessionStorage.getItem("userData");
+    const sessionTopArtists = sessionStorage.getItem("topArtists");
+    const sessionTopTracks = sessionStorage.getItem("topTracks");
+
+    if (sessionUserData && sessionTopArtists && sessionTopTracks) {
+      setUserData(JSON.parse(sessionUserData));
+      setTopArtists(JSON.parse(sessionTopArtists));
+      setTopTracks(JSON.parse(sessionTopTracks));
+      setIsLoading(false);
+      return;
+    }
+
     const fetchUserData = async () => {
       try {
         const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_URL}/user`, {
@@ -32,6 +46,7 @@ export function UserDataProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) throw new Error("Failed to fetch user data");
         const data = await response.json();
         setUserData(data);
+        sessionStorage.setItem("userData", JSON.stringify(data));
       } catch (err) {
         setError("Failed to load user data");
         console.error(err);
@@ -47,6 +62,7 @@ export function UserDataProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) throw new Error("Failed to fetch artists data");
         const data: ArtistData[] = await response.json();
         setTopArtists(data);
+        sessionStorage.setItem("topArtists", JSON.stringify(data));
       } catch (err) {
         setError("Failed to load artists data");
         console.error(err);
@@ -62,6 +78,7 @@ export function UserDataProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) throw new Error("Failed to fetch tracks data");
         const data: TrackData[] = await response.json();
         setTopTracks(data);
+        sessionStorage.setItem("topTracks", JSON.stringify(data));
       } catch (err) {
         setError("Failed to load tracks data");
         console.error(err);
